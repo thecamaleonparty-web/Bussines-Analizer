@@ -4,7 +4,7 @@
 // ====================================
 
 // Global state
-let currentLanguage = 'en';
+let currentLanguage = 'es';
 let projectData = null;
 let strategicData = null;
 let charts = {
@@ -518,16 +518,16 @@ const ChartManager = {
                 datasets: [{
                     label: t['chart-monthly-cashflow'],
                     data: cashFlows,
-                    borderColor: '#2563EB',
-                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    borderColor: '#8338ec',
+                    backgroundColor: 'rgba(131, 56, 236, 0.3)',
                     borderWidth: 2,
                     fill: true,
                     tension: 0.4
                 }, {
                     label: t['chart-cumulative-cashflow'],
                     data: cumulativeCashFlow,
-                    borderColor: '#059669',
-                    backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                    borderColor: '#39ff14',
+                    backgroundColor: 'rgba(57, 255, 20, 0.3)',
                     borderWidth: 2,
                     fill: true,
                     tension: 0.4
@@ -540,7 +540,7 @@ const ChartManager = {
                     legend: {
                         display: true,
                         position: 'top',
-                        labels: { color: '#4B5563', font: { size: 12, weight: '500' } }
+                        labels: { color: '#ffffff', font: { size: 12, weight: '500' } }
                     },
                     tooltip: {
                         mode: 'index',
@@ -566,13 +566,13 @@ const ChartManager = {
                                 const locale = currentLanguage === 'es' ? 'es-ES' : 'en-US';
                                 return '$' + value.toLocaleString(locale);
                             },
-                            color: '#6B7280'
+                            color: 'rgba(255, 255, 255, 0.85)'
                         },
-                        grid: { color: '#E5E7EB' }
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     },
                     x: {
-                        ticks: { color: '#6B7280' },
-                        grid: { color: '#E5E7EB' }
+                        ticks: { color: 'rgba(255, 255, 255, 0.85)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
                 },
                 interaction: {
@@ -606,14 +606,14 @@ const ChartManager = {
                     label: 'ROI (%)',
                     data: [expectedROI, bestROI, worstROI],
                     backgroundColor: [
-                        'rgba(37, 99, 235, 0.8)',
-                        'rgba(5, 150, 105, 0.8)',
-                        'rgba(245, 158, 11, 0.8)'
+                        'rgba(0, 217, 255, 0.8)',
+                        'rgba(57, 255, 20, 0.8)',
+                        'rgba(255, 0, 110, 0.8)'
                     ],
                     borderColor: [
-                        '#2563EB',
-                        '#059669',
-                        '#F59E0B'
+                        '#00d9ff',
+                        '#39ff14',
+                        '#ff006e'
                     ],
                     borderWidth: 2
                 }]
@@ -640,13 +640,13 @@ const ChartManager = {
                             callback: function(value) {
                                 return value + '%';
                             },
-                            color: '#6B7280'
+                            color: 'rgba(255, 255, 255, 0.85)'
                         },
-                        grid: { color: '#E5E7EB' }
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     },
                     x: {
-                        ticks: { color: '#6B7280' },
-                        grid: { color: '#E5E7EB' }
+                        ticks: { color: 'rgba(255, 255, 255, 0.85)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
                 }
             }
@@ -679,8 +679,8 @@ const ChartManager = {
                         100 / (expectedMetrics.paybackPeriod || 1),
                         expectedMetrics.irr
                     ],
-                    borderColor: '#2563EB',
-                    backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                    borderColor: '#00d9ff',
+                    backgroundColor: 'rgba(0, 217, 255, 0.3)',
                     borderWidth: 2
                 }, {
                     label: t['scenario-best'],
@@ -690,8 +690,8 @@ const ChartManager = {
                         100 / (bestMetrics.paybackPeriod || 1),
                         bestMetrics.irr
                     ],
-                    borderColor: '#059669',
-                    backgroundColor: 'rgba(5, 150, 105, 0.2)',
+                    borderColor: '#39ff14',
+                    backgroundColor: 'rgba(57, 255, 20, 0.3)',
                     borderWidth: 2
                 }, {
                     label: t['scenario-worst'],
@@ -701,8 +701,8 @@ const ChartManager = {
                         100 / (worstMetrics.paybackPeriod || 1),
                         worstMetrics.irr
                     ],
-                    borderColor: '#F59E0B',
-                    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                    borderColor: '#ff6b35',
+                    backgroundColor: 'rgba(255, 107, 53, 0.3)',
                     borderWidth: 2
                 }]
             },
@@ -713,15 +713,15 @@ const ChartManager = {
                     legend: {
                         display: true,
                         position: 'top',
-                        labels: { color: '#4B5563', font: { size: 12, weight: '500' } }
+                        labels: { color: '#ffffff', font: { size: 12, weight: '500' } }
                     }
                 },
                 scales: {
                     r: {
                         beginAtZero: true,
-                        ticks: { color: '#6B7280', backdropColor: 'transparent' },
-                        grid: { color: '#E5E7EB' },
-                        pointLabels: { color: '#4B5563', font: { size: 12, weight: '500' } }
+                        ticks: { color: 'rgba(255, 255, 255, 0.85)', backdropColor: 'transparent' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: { color: '#ffffff', font: { size: 12, weight: '500' } }
                     }
                 }
             }
