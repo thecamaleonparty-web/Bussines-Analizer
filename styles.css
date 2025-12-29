@@ -284,7 +284,7 @@ section h3 {
     background-clip: text;
     margin-bottom: 0.5rem;
     line-height: 1;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 .metric-card.success .metric-value {
@@ -611,7 +611,7 @@ button:disabled {
     color: var(--text-primary);
     font-weight: 600;
     font-size: 1rem;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 /* Recommendations - Professional */
@@ -1001,7 +1001,7 @@ button:disabled {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--fintech-cyan);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 .progress-bar {
