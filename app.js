@@ -206,6 +206,102 @@ const translations = {
         
         // Progress Indicator
         'progress-title': 'Puntuación de Calidad del Business Case'
+    },
+    pt: {
+        // Header
+        'header-title': 'Analisador de Casos de Negócio Pro',
+        'header-subtitle': 'Análise Financeira Profissional e Calculadora de ROI',
+        
+        // Section Titles
+        'section-strategic': 'Análise Estratégica',
+        'strategic-description': 'Comece definindo a base estratégica do seu caso de negócio. Nossa IA analisará a viabilidade e fornecerá insights.',
+        'section-dashboard': 'Painel Financeiro',
+        'section-project-info': 'Informações do Projeto',
+        'section-visual-analysis': 'Análise Visual',
+        'section-scenarios': 'Comparação de Cenários',
+        'section-recommendations': 'Recomendações Inteligentes',
+        'section-export': 'Exportar Relatório',
+        
+        // Subsections
+        'subsection-revenue': 'Projeções de Receita',
+        'subsection-costs': 'Projeções de Custos',
+        'subsection-scenarios': 'Análise de Cenários',
+        
+        // Form Labels - Strategic
+        'label-stratProjectName': 'Nome do Projeto',
+        'label-problemOpportunity': 'Problema/Oportunidade Identificada',
+        'label-proposedSolution': 'Solução Proposta (com ou sem IA)',
+        'label-successMetrics': 'Métricas de Sucesso / ROI',
+        
+        // Form Labels - Financial
+        'label-projectName': 'Nome do Projeto',
+        'label-initialInvestment': 'Investimento Inicial ($)',
+        'label-discountRate': 'Taxa de Desconto (%)',
+        'label-projectDuration': 'Duração do Projeto (meses)',
+        'label-yearlyRevenue': 'Aumento de Receita Anual ($)',
+        'label-revenueGrowth': 'Taxa de Crescimento de Receita (% anual)',
+        'label-operatingCosts': 'Custos Operacionais Anuais ($)',
+        'label-maintenanceCosts': 'Custos de Manutenção Anuais ($)',
+        'label-bestCaseMultiplier': 'Multiplicador Melhor Caso',
+        'label-worstCaseMultiplier': 'Multiplicador Pior Caso',
+        
+        // Buttons
+        'btn-generate-analysis': 'Gerar Análise',
+        'btn-continue-financial': 'Continuar para Projeção Financeira',
+        'btn-back-step1': '← Voltar para Análise Estratégica',
+        'btn-calculate': 'Calcular Análise',
+        'btn-reset': 'Redefinir Formulário',
+        'btn-export': 'Exportar Relatório Completo em PDF',
+        'analysis-title': 'Resultado da Análise Estratégica',
+        
+        // Tabs
+        'tab-cashflow': 'Fluxo de Caixa ao Longo do Tempo',
+        'tab-roi': 'Comparação de ROI',
+        'tab-scenarios': 'Análise de Cenários',
+        
+        // Metrics
+        'metric-roi': 'ROI (Retorno sobre Investimento)',
+        'metric-npv': 'VPL (Valor Presente Líquido)',
+        'metric-payback': 'Período de Retorno',
+        'metric-irr': 'TIR (Taxa Interna de Retorno)',
+        
+        // Scenario Cards
+        'scenario-expected': 'Caso Esperado',
+        'scenario-best': 'Melhor Caso',
+        'scenario-worst': 'Pior Caso',
+        'scenario-roi-label': 'ROI:',
+        'scenario-npv-label': 'VPL:',
+        'scenario-payback-label': 'Retorno:',
+        
+        // Messages
+        'export-description': 'Gere um relatório PDF abrangente com todas as métricas, gráficos e recomendações.',
+        'default-recommendations': 'Complete o formulário e calcule para receber recomendações inteligentes baseadas na análise do seu caso de negócio.',
+        'loading': 'Analisando...',
+        'success-message': '✓ Análise concluída com sucesso! Revise as métricas e recomendações abaixo.',
+        
+        // Chart Labels
+        'chart-monthly-cashflow': 'Fluxo de Caixa Mensal',
+        'chart-cumulative-cashflow': 'Fluxo de Caixa Acumulado',
+        'chart-expected-roi': 'ROI Esperado',
+        'chart-best-roi': 'ROI Melhor Caso',
+        'chart-worst-roi': 'ROI Pior Caso',
+        
+        // Metric Status
+        'status-positive-return': '✓ Retorno positivo',
+        'status-negative-return': '✗ Retorno negativo',
+        'status-creates-value': '✓ Gera valor',
+        'status-destroys-value': '✗ Destrói valor',
+        'status-discounted-cashflow': 'Fluxo de caixa descontado',
+        'status-months-to-recover': 'meses para recuperar investimento',
+        'status-annualized-return': 'Taxa de retorno anualizada',
+        'status-enter-data': 'Insira dados para calcular',
+        
+        // Units
+        'unit-months': 'meses',
+        'unit-years': 'anos',
+        
+        // Progress Indicator
+        'progress-title': 'Pontuação de Qualidade do Caso de Negócio'
     }
 };
 
@@ -214,9 +310,13 @@ function switchLanguage(lang) {
     currentLanguage = lang;
     document.documentElement.lang = lang;
     
-    // Update language toggle buttons
-    document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-    document.getElementById('lang-es').classList.toggle('active', lang === 'es');
+    // Update language toggle buttons with Tailwind classes
+    document.getElementById('lang-en').classList.toggle('bg-cyan-500', lang === 'en');
+    document.getElementById('lang-en').classList.toggle('border-cyan-500', lang === 'en');
+    document.getElementById('lang-es').classList.toggle('bg-cyan-500', lang === 'es');
+    document.getElementById('lang-es').classList.toggle('border-cyan-500', lang === 'es');
+    document.getElementById('lang-pt').classList.toggle('bg-cyan-500', lang === 'pt');
+    document.getElementById('lang-pt').classList.toggle('border-cyan-500', lang === 'pt');
     
     // Update all translatable elements
     const t = translations[lang];
@@ -917,13 +1017,23 @@ document.getElementById('projectForm').addEventListener('submit', function(e) {
 
 // Tab Switching
 function switchTab(tabName) {
-    // Remove active class from all tabs and content
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    // Remove active styling from all tabs
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('border-cyan-500', 'text-slate-300');
+        tab.classList.add('border-transparent', 'text-slate-400');
+    });
     
-    // Add active class to clicked tab and corresponding content
-    event.target.classList.add('active');
-    document.getElementById(tabName + '-tab').classList.add('active');
+    // Hide all tab content
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+    
+    // Add active styling to clicked tab
+    event.target.classList.remove('border-transparent', 'text-slate-400');
+    event.target.classList.add('border-cyan-500', 'text-slate-300');
+    
+    // Show corresponding content
+    document.getElementById(tabName + '-tab').classList.remove('hidden');
 }
 
 // Reset Form
