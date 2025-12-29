@@ -167,19 +167,19 @@
             <form id="projectForm" class="space-y-6">
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label for="projectName" class="block text-sm font-medium text-slate-300 mb-2">Nombre del Proyecto *</label>
+                        <label for="projectName" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-projectName">Nombre del Proyecto</span> *</label>
                         <input type="text" id="projectName" placeholder="ej., Transformación Digital" required class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                     <div>
-                        <label for="initialInvestment" class="block text-sm font-medium text-slate-300 mb-2">Inversión Inicial ($) *</label>
+                        <label for="initialInvestment" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-initialInvestment">Inversión Inicial ($)</span> *</label>
                         <input type="number" id="initialInvestment" placeholder="100000" min="0" step="1000" required class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                     <div>
-                        <label for="discountRate" class="block text-sm font-medium text-slate-300 mb-2">Tasa de Descuento (%) * <span class="tooltip-icon cursor-pointer" title="Tasa utilizada para descontar flujos futuros al valor presente">ℹ️</span></label>
+                        <label for="discountRate" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-discountRate">Tasa de Descuento (%)</span> * <span class="tooltip-icon cursor-pointer" title="Tasa utilizada para descontar flujos futuros al valor presente">ℹ️</span></label>
                         <input type="number" id="discountRate" placeholder="10" min="0" max="100" step="0.1" value="10" required class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                     <div>
-                        <label for="projectDuration" class="block text-sm font-medium text-slate-300 mb-2">Duración del Proyecto (meses) *</label>
+                        <label for="projectDuration" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-projectDuration">Duración del Proyecto (meses)</span> *</label>
                         <input type="number" id="projectDuration" placeholder="24" min="1" max="120" value="24" required class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                 </div>
@@ -187,11 +187,11 @@
                 <h3 id="subsection-revenue" class="text-xl font-bold text-emerald-400 mt-8 mb-4">Revenue Projections</h3>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label for="yearlyRevenue" class="block text-sm font-medium text-slate-300 mb-2">Incremento de Ingresos Anuales ($) * <span class="tooltip-icon cursor-pointer" title="Aumento esperado en ingresos cada año">ℹ️</span></label>
+                        <label for="yearlyRevenue" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-yearlyRevenue">Incremento de Ingresos Anuales ($)</span> * <span class="tooltip-icon cursor-pointer" title="Aumento esperado en ingresos cada año">ℹ️</span></label>
                         <input type="number" id="yearlyRevenue" placeholder="50000" min="0" step="1000" required class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                     <div>
-                        <label for="revenueGrowth" class="block text-sm font-medium text-slate-300 mb-2">Tasa de Crecimiento de Ingresos (% anual) <span class="tooltip-icon cursor-pointer" title="Porcentaje de crecimiento anual de ingresos">ℹ️</span></label>
+                        <label for="revenueGrowth" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-revenueGrowth">Tasa de Crecimiento de Ingresos (% anual)</span> <span class="tooltip-icon cursor-pointer" title="Porcentaje de crecimiento anual de ingresos">ℹ️</span></label>
                         <input type="number" id="revenueGrowth" placeholder="5" min="0" max="100" step="0.1" value="0" class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                 </div>
@@ -199,11 +199,11 @@
                 <h3 id="subsection-costs" class="text-xl font-bold text-blue-400 mt-8 mb-4">Cost Projections</h3>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label for="operatingCosts" class="block text-sm font-medium text-slate-300 mb-2">Costos Operativos Anuales ($) <span class="tooltip-icon cursor-pointer" title="Gastos recurrentes de operación">ℹ️</span></label>
+                        <label for="operatingCosts" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-operatingCosts">Costos Operativos Anuales ($)</span> <span class="tooltip-icon cursor-pointer" title="Gastos recurrentes de operación">ℹ️</span></label>
                         <input type="number" id="operatingCosts" placeholder="20000" min="0" step="1000" value="0" class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                     <div>
-                        <label for="maintenanceCosts" class="block text-sm font-medium text-slate-300 mb-2">Costos de Mantenimiento Anuales ($) <span class="tooltip-icon cursor-pointer" title="Gastos anuales de mantenimiento">ℹ️</span></label>
+                        <label for="maintenanceCosts" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-maintenanceCosts">Costos de Mantenimiento Anuales ($)</span> <span class="tooltip-icon cursor-pointer" title="Gastos anuales de mantenimiento">ℹ️</span></label>
                         <input type="number" id="maintenanceCosts" placeholder="5000" min="0" step="1000" value="0" class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                 </div>
@@ -211,11 +211,11 @@
                 <h3 id="subsection-scenarios" class="text-xl font-bold text-purple-400 mt-8 mb-4">Scenario Analysis</h3>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label for="bestCaseMultiplier" class="block text-sm font-medium text-slate-300 mb-2">Multiplicador Mejor Caso <span class="tooltip-icon cursor-pointer" title="Factor optimista para escenarios favorables">ℹ️</span></label>
+                        <label for="bestCaseMultiplier" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-bestCaseMultiplier">Multiplicador Mejor Caso</span> <span class="tooltip-icon cursor-pointer" title="Factor optimista para escenarios favorables">ℹ️</span></label>
                         <input type="number" id="bestCaseMultiplier" placeholder="1.3" min="1" max="3" step="0.1" value="1.3" class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                     <div>
-                        <label for="worstCaseMultiplier" class="block text-sm font-medium text-slate-300 mb-2">Multiplicador Peor Caso <span class="tooltip-icon cursor-pointer" title="Factor pesimista para escenarios adversos">ℹ️</span></label>
+                        <label for="worstCaseMultiplier" class="block text-sm font-medium text-slate-300 mb-2"><span id="label-worstCaseMultiplier">Multiplicador Peor Caso</span> <span class="tooltip-icon cursor-pointer" title="Factor pesimista para escenarios adversos">ℹ️</span></label>
                         <input type="number" id="worstCaseMultiplier" placeholder="0.7" min="0.1" max="1" step="0.1" value="0.7" class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
                     </div>
                 </div>
@@ -236,9 +236,9 @@
         <section class="bg-slate-800/30 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 mb-8">
             <h2 id="section-visual-analysis" class="text-3xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Visual Analysis</h2>
             <div class="flex gap-2 mb-6 border-b border-slate-700">
-                <button class="tab px-6 py-3 font-medium text-slate-300 border-b-2 border-cyan-500" onclick="switchTab('cashflow')">Flujo de Caja en el Tiempo</button>
-                <button class="tab px-6 py-3 font-medium text-slate-400 border-b-2 border-transparent hover:border-slate-600 transition-all" onclick="switchTab('roi')">Comparación de ROI</button>
-                <button class="tab px-6 py-3 font-medium text-slate-400 border-b-2 border-transparent hover:border-slate-600 transition-all" onclick="switchTab('scenarios')">Análisis de Escenarios</button>
+                <button id="tab-cashflow" class="tab px-6 py-3 font-medium text-slate-300 border-b-2 border-cyan-500" onclick="switchTab('cashflow')">Flujo de Caja en el Tiempo</button>
+                <button id="tab-roi" class="tab px-6 py-3 font-medium text-slate-400 border-b-2 border-transparent hover:border-slate-600 transition-all" onclick="switchTab('roi')">Comparación de ROI</button>
+                <button id="tab-scenarios" class="tab px-6 py-3 font-medium text-slate-400 border-b-2 border-transparent hover:border-slate-600 transition-all" onclick="switchTab('scenarios')">Análisis de Escenarios</button>
             </div>
 
             <div id="cashflow-tab" class="tab-content">
@@ -324,7 +324,7 @@
         <section class="bg-slate-800/30 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 mb-8">
             <h2 id="section-recommendations" class="text-3xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Smart Recommendations</h2>
             <div class="text-slate-400" id="recommendations">
-                <p>Complete el formulario y calcule para recibir recomendaciones inteligentes basadas en su análisis de caso de negocio.</p>
+                <p id="default-recommendations">Complete el formulario y calcule para recibir recomendaciones inteligentes basadas en su análisis de caso de negocio.</p>
             </div>
         </section>
 
