@@ -4,17 +4,6 @@ A professional-grade financial analysis tool for evaluating business cases with 
 
 **🌐 BILINGUAL** - Full English/Spanish interface with professional financial terminology and seamless language switching.
 
-## 📸 Screenshots
-
-### Professional Dashboard - English Version
-![Professional Design - English](professional-design-final.png)
-
-### Panel Profesional - Versión en Español
-![Diseño Profesional - Español](professional-spanish.png)
-
-### Calculated Results with Smart Recommendations
-![Analysis Results](professional-calculated.png)
-
 *Professional corporate design inspired by DEPT Agency and Noomo Agency - clean, minimal, and executive-ready.*
 
 ## ✨ Features
