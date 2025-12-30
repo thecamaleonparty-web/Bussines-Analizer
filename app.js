@@ -1990,6 +1990,12 @@ function updateOverallProgress() {
                 problemOpportunity: 'Problema definido con impacto cuantificable',
                 proposedSolution: 'Solución estructurada con alcance claro',
                 successMetrics: 'Métricas SMART con plazos definidos'
+            },
+            pt: {
+                stratProjectName: 'Nome do projeto claro e profissional',
+                problemOpportunity: 'Problema definido com impacto quantificável',
+                proposedSolution: 'Solução estruturada com escopo claro',
+                successMetrics: 'Métricas SMART com prazos definidos'
             }
         };
         
