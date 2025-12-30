@@ -389,23 +389,27 @@ function switchLanguage(lang) {
         }
     });
     
+    // Helper function to update placeholders
+    const updatePlaceholders = (fieldIds) => {
+        fieldIds.forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            const placeholderKey = `placeholder-${fieldId}`;
+            if (element && t[placeholderKey]) {
+                element.placeholder = t[placeholderKey];
+            }
+        });
+    };
+    
     // Update placeholders for strategic form
-    const stratPlaceholders = [
+    updatePlaceholders([
         'stratProjectName',
         'problemOpportunity',
         'proposedSolution',
         'successMetrics'
-    ];
-    stratPlaceholders.forEach(fieldId => {
-        const element = document.getElementById(fieldId);
-        const placeholderKey = `placeholder-${fieldId}`;
-        if (element && t[placeholderKey]) {
-            element.placeholder = t[placeholderKey];
-        }
-    });
+    ]);
     
     // Update placeholders for financial form
-    const financialPlaceholders = [
+    updatePlaceholders([
         'projectName',
         'initialInvestment',
         'discountRate',
@@ -416,14 +420,7 @@ function switchLanguage(lang) {
         'maintenanceCosts',
         'bestCaseMultiplier',
         'worstCaseMultiplier'
-    ];
-    financialPlaceholders.forEach(fieldId => {
-        const element = document.getElementById(fieldId);
-        const placeholderKey = `placeholder-${fieldId}`;
-        if (element && t[placeholderKey]) {
-            element.placeholder = t[placeholderKey];
-        }
-    });
+    ]);
     
     // Update form labels (preserving help icons)
     const labels = document.querySelectorAll('label[for]');
