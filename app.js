@@ -109,7 +109,25 @@ const translations = {
         'unit-years': 'years',
         
         // Progress Indicator
-        'progress-title': 'Business Case Quality Score'
+        'progress-title': 'Business Case Quality Score',
+        
+        // Placeholders - Strategic Form
+        'placeholder-stratProjectName': 'e.g., AI-Powered Customer Support Automation',
+        'placeholder-problemOpportunity': 'e.g., Our support team spends 10 hours/week manually classifying tickets, causing 4-hour delays and 15% customer dissatisfaction...',
+        'placeholder-proposedSolution': 'e.g., Implement an AI triage agent for instant ticket classification. Phase 1: Auto-categorization and priority assessment. Out of scope: Automated responses...',
+        'placeholder-successMetrics': 'e.g., Reduce classification time by 90% in Q1 (10h to 1h/week), decrease first response time by 50%, improve satisfaction by 5 points...',
+        
+        // Placeholders - Financial Form
+        'placeholder-projectName': 'e.g., Digital Transformation',
+        'placeholder-initialInvestment': '100000',
+        'placeholder-discountRate': '10',
+        'placeholder-projectDuration': '24',
+        'placeholder-yearlyRevenue': '50000',
+        'placeholder-revenueGrowth': '5',
+        'placeholder-operatingCosts': '20000',
+        'placeholder-maintenanceCosts': '5000',
+        'placeholder-bestCaseMultiplier': '1.3',
+        'placeholder-worstCaseMultiplier': '0.7'
     },
     es: {
         // Header
@@ -205,7 +223,25 @@ const translations = {
         'unit-years': 'años',
         
         // Progress Indicator
-        'progress-title': 'Puntuación de Calidad del Business Case'
+        'progress-title': 'Puntuación de Calidad del Business Case',
+        
+        // Placeholders - Strategic Form
+        'placeholder-stratProjectName': 'ej., Automatización de soporte al cliente basada en IA',
+        'placeholder-problemOpportunity': 'ej., Nuestro equipo de soporte pasa 10 horas/semana clasificando tickets manualmente, causando retrasos de 4 horas y un 15% de insatisfacción del cliente...',
+        'placeholder-proposedSolution': 'ej., Implementar un agente de clasificación de tickets basado en IA para clasificación instantánea. Fase 1: Categorización automática y evaluación de prioridades. Fuera de alcance: Respuestas automáticas...',
+        'placeholder-successMetrics': 'ej., Reducir el tiempo de clasificación en un 90% en Q1 (10h a 1h/semana), disminuir el tiempo de primera respuesta en un 50%, mejorar la satisfacción en 5 puntos...',
+        
+        // Placeholders - Financial Form
+        'placeholder-projectName': 'ej., Transformación Digital',
+        'placeholder-initialInvestment': '100000',
+        'placeholder-discountRate': '10',
+        'placeholder-projectDuration': '24',
+        'placeholder-yearlyRevenue': '50000',
+        'placeholder-revenueGrowth': '5',
+        'placeholder-operatingCosts': '20000',
+        'placeholder-maintenanceCosts': '5000',
+        'placeholder-bestCaseMultiplier': '1.3',
+        'placeholder-worstCaseMultiplier': '0.7'
     },
     pt: {
         // Header
@@ -301,7 +337,25 @@ const translations = {
         'unit-years': 'anos',
         
         // Progress Indicator
-        'progress-title': 'Pontuação de Qualidade do Caso de Negócio'
+        'progress-title': 'Pontuação de Qualidade do Caso de Negócio',
+        
+        // Placeholders - Strategic Form
+        'placeholder-stratProjectName': 'ex., Automação de suporte ao cliente baseada em IA',
+        'placeholder-problemOpportunity': 'ex., Nossa equipe de suporte gasta 10 horas/semana classificando tickets manualmente, causando atrasos de 4 horas e 15% de insatisfação do cliente...',
+        'placeholder-proposedSolution': 'ex., Implementar um agente de classificação de tickets baseado em IA para classificação instantânea. Fase 1: Categorização automática e avaliação de prioridades. Fora do escopo: Respostas automatizadas...',
+        'placeholder-successMetrics': 'ex., Reduzir o tempo de classificação em 90% no Q1 (10h para 1h/semana), diminuir o tempo de primeira resposta em 50%, melhorar a satisfação em 5 pontos...',
+        
+        // Placeholders - Financial Form
+        'placeholder-projectName': 'ex., Transformação Digital',
+        'placeholder-initialInvestment': '100000',
+        'placeholder-discountRate': '10',
+        'placeholder-projectDuration': '24',
+        'placeholder-yearlyRevenue': '50000',
+        'placeholder-revenueGrowth': '5',
+        'placeholder-operatingCosts': '20000',
+        'placeholder-maintenanceCosts': '5000',
+        'placeholder-bestCaseMultiplier': '1.3',
+        'placeholder-worstCaseMultiplier': '0.7'
     }
 };
 
@@ -332,6 +386,42 @@ function switchLanguage(lang) {
             } else {
                 element.textContent = t[key];
             }
+        }
+    });
+    
+    // Update placeholders for strategic form
+    const stratPlaceholders = [
+        'stratProjectName',
+        'problemOpportunity',
+        'proposedSolution',
+        'successMetrics'
+    ];
+    stratPlaceholders.forEach(fieldId => {
+        const element = document.getElementById(fieldId);
+        const placeholderKey = `placeholder-${fieldId}`;
+        if (element && t[placeholderKey]) {
+            element.placeholder = t[placeholderKey];
+        }
+    });
+    
+    // Update placeholders for financial form
+    const financialPlaceholders = [
+        'projectName',
+        'initialInvestment',
+        'discountRate',
+        'projectDuration',
+        'yearlyRevenue',
+        'revenueGrowth',
+        'operatingCosts',
+        'maintenanceCosts',
+        'bestCaseMultiplier',
+        'worstCaseMultiplier'
+    ];
+    financialPlaceholders.forEach(fieldId => {
+        const element = document.getElementById(fieldId);
+        const placeholderKey = `placeholder-${fieldId}`;
+        if (element && t[placeholderKey]) {
+            element.placeholder = t[placeholderKey];
         }
     });
     
