@@ -448,10 +448,15 @@ const hasSignChange = (flows) => {
     return false;
 };
 
-const FinancialCalculator = {
+const FinanceEngine = {
+    round(num) {
+        return Math.round((num + Number.EPSILON) * 100) / 100;
+    },
+
     calculateROI(investment, totalReturn) {
         if (investment === 0) return 0;
-        return ((totalReturn - investment) / investment) * 100;
+        const roi = ((totalReturn - investment) / investment) * 100;
+        return this.round(roi);
     },
 
     calculateNPV(flows, ratePercent) {
@@ -459,7 +464,7 @@ const FinancialCalculator = {
         for (let i = 0; i < flows.length; i++) {
             npv += flows[i] / Math.pow(1 + ratePercent / 100, i + 1);
         }
-        return npv;
+        return this.round(npv);
     },
 
     calculatePaybackPeriod(initialInvestment, monthlyFlows) {
@@ -469,10 +474,10 @@ const FinancialCalculator = {
             if (cumulative >= 0) {
                 const priorCumulative = cumulative - monthlyFlows[i];
                 const fraction = -priorCumulative / monthlyFlows[i];
-                return i + fraction;
+                return this.round(i + fraction);
             }
         }
-        return monthlyFlows.length;
+        return this.round(monthlyFlows.length);
     },
     
     calculateIRR(flows, initialGuess = 0.1) {
@@ -497,11 +502,11 @@ const FinancialCalculator = {
             const nextGuess = guess - npv / slope;
             if (!Number.isFinite(nextGuess)) return NaN;
             if (Math.abs(nextGuess - guess) < tolerance) {
-                return nextGuess * 100;
+                return this.round(nextGuess * 100);
             }
             guess = nextGuess;
         }
-        return guess * 100;
+        return this.round(guess * 100);
     },
     
     generateCashFlows(data) {
@@ -510,12 +515,12 @@ const FinancialCalculator = {
         const growthMonthly = Math.pow(1 + data.revenueGrowth / 100, 1 / 12) - 1;
         
         const flows = [];
-        flows.push(-data.initialInvestment);
+        flows.push(this.round(-data.initialInvestment));
 
         for (let month = 1; month <= data.projectDuration; month++) {
             const growthFactor = Math.pow(1 + growthMonthly, month - 1);
             const revenue = revPerMonth * growthFactor;
-            flows.push(revenue - costPerMonth);
+            flows.push(this.round(revenue - costPerMonth));
         }
 
         return flows;
@@ -537,7 +542,7 @@ const FinancialCalculator = {
             paybackPeriod,
             irr,
             cashFlows: flows,
-            totalRevenue
+            totalRevenue: this.round(totalRevenue)
         };
     }
 };
@@ -571,7 +576,7 @@ const validateProjectData = (data) => {
     }
 
     if (errors.length === 0) {
-        const flows = FinancialCalculator.generateCashFlows(data);
+        const flows = FinanceEngine.generateCashFlows(data);
         if (!hasSignChange(flows)) {
             errors.push('Los flujos de caja no cambian de signo; no es posible calcular la TIR.');
         }
@@ -581,14 +586,35 @@ const validateProjectData = (data) => {
 };
 
 const UIUpdater = {
+    formatCurrency(value, locale = 'en-US') {
+        try {
+            return value.toLocaleString(locale, { 
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0 
+            });
+        } catch (e) {
+            // Fallback for browsers that don't support toLocaleString options
+            return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+    },
+
+    formatPercent(value) {
+        try {
+            return value.toFixed(2);
+        } catch (e) {
+            // Fallback for any edge cases
+            return Math.round(value * 100) / 100;
+        }
+    },
+
     updateDashboard(metrics) {
         const t = translations[currentLanguage];
         const locale = currentLanguage === 'es' ? 'es-ES' : 'en-US';
         
-        document.getElementById('roi-value').textContent = metrics.roi.toFixed(2) + '%';
-        document.getElementById('npv-value').textContent = '$' + metrics.npv.toLocaleString(locale, { maximumFractionDigits: 0 });
-        document.getElementById('payback-value').textContent = metrics.paybackPeriod.toFixed(1);
-        const irrText = Number.isFinite(metrics.irr) ? `${metrics.irr.toFixed(2)}%` : 'N/D';
+        document.getElementById('roi-value').textContent = this.formatPercent(metrics.roi) + '%';
+        document.getElementById('npv-value').textContent = '$' + this.formatCurrency(metrics.npv, locale);
+        document.getElementById('payback-value').textContent = this.formatPercent(metrics.paybackPeriod);
+        const irrText = Number.isFinite(metrics.irr) ? `${this.formatPercent(metrics.irr)}%` : 'N/D';
         document.getElementById('irr-value').textContent = irrText;
 
         const roiStatus = document.getElementById('roi-status');
@@ -603,17 +629,17 @@ const UIUpdater = {
         const locale = currentLanguage === 'es' ? 'es-ES' : 'en-US';
         const unitMonths = ' ' + t['unit-months'];
         
-        document.getElementById('expected-roi').textContent = expectedMetrics.roi.toFixed(2) + '%';
-        document.getElementById('expected-npv').textContent = '$' + expectedMetrics.npv.toLocaleString(locale, { maximumFractionDigits: 0 });
-        document.getElementById('expected-payback').textContent = expectedMetrics.paybackPeriod.toFixed(1) + unitMonths;
+        document.getElementById('expected-roi').textContent = this.formatPercent(expectedMetrics.roi) + '%';
+        document.getElementById('expected-npv').textContent = '$' + this.formatCurrency(expectedMetrics.npv, locale);
+        document.getElementById('expected-payback').textContent = this.formatPercent(expectedMetrics.paybackPeriod) + unitMonths;
 
-        document.getElementById('best-roi').textContent = bestMetrics.roi.toFixed(2) + '%';
-        document.getElementById('best-npv').textContent = '$' + bestMetrics.npv.toLocaleString(locale, { maximumFractionDigits: 0 });
-        document.getElementById('best-payback').textContent = bestMetrics.paybackPeriod.toFixed(1) + unitMonths;
+        document.getElementById('best-roi').textContent = this.formatPercent(bestMetrics.roi) + '%';
+        document.getElementById('best-npv').textContent = '$' + this.formatCurrency(bestMetrics.npv, locale);
+        document.getElementById('best-payback').textContent = this.formatPercent(bestMetrics.paybackPeriod) + unitMonths;
 
-        document.getElementById('worst-roi').textContent = worstMetrics.roi.toFixed(2) + '%';
-        document.getElementById('worst-npv').textContent = '$' + worstMetrics.npv.toLocaleString(locale, { maximumFractionDigits: 0 });
-        document.getElementById('worst-payback').textContent = worstMetrics.paybackPeriod.toFixed(1) + unitMonths;
+        document.getElementById('worst-roi').textContent = this.formatPercent(worstMetrics.roi) + '%';
+        document.getElementById('worst-npv').textContent = '$' + this.formatCurrency(worstMetrics.npv, locale);
+        document.getElementById('worst-payback').textContent = this.formatPercent(worstMetrics.paybackPeriod) + unitMonths;
     },
 
     showMessage(type, message) {
@@ -637,11 +663,21 @@ const UIUpdater = {
 };
 
 const ChartManager = {
+    destroyExistingChart(canvasId) {
+        if (typeof Chart === 'undefined') return;
+        const existingChart = Chart.getChart(canvasId);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+    },
+
     createCashFlowChart(cashFlows, duration) {
         if (typeof Chart === 'undefined') {
             console.warn('Chart.js not loaded. Skipping chart creation.');
             return;
         }
+        
+        this.destroyExistingChart('cashflowChart');
         
         const ctx = document.getElementById('cashflowChart').getContext('2d');
         
@@ -667,16 +703,16 @@ const ChartManager = {
                 datasets: [{
                     label: t['chart-monthly-cashflow'],
                     data: cashFlows,
-                    borderColor: '#8338ec',
-                    backgroundColor: 'rgba(131, 56, 236, 0.3)',
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.3)',
                     borderWidth: 2,
                     fill: true,
                     tension: 0.4
                 }, {
                     label: t['chart-cumulative-cashflow'],
                     data: cumulativeCashFlow,
-                    borderColor: '#39ff14',
-                    backgroundColor: 'rgba(57, 255, 20, 0.3)',
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.3)',
                     borderWidth: 2,
                     fill: true,
                     tension: 0.4
@@ -739,6 +775,8 @@ const ChartManager = {
             return;
         }
         
+        this.destroyExistingChart('roiChart');
+        
         const t = translations[currentLanguage];
         const ctx = document.getElementById('roiChart').getContext('2d');
         
@@ -754,14 +792,14 @@ const ChartManager = {
                     label: 'ROI (%)',
                     data: [expectedROI, bestROI, worstROI],
                     backgroundColor: [
-                        'rgba(0, 217, 255, 0.8)',
-                        'rgba(57, 255, 20, 0.8)',
-                        'rgba(255, 0, 110, 0.8)'
+                        'rgba(6, 182, 212, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(59, 130, 246, 0.8)'
                     ],
                     borderColor: [
-                        '#00d9ff',
-                        '#39ff14',
-                        '#ff006e'
+                        '#06b6d4',
+                        '#10b981',
+                        '#3b82f6'
                     ],
                     borderWidth: 2
                 }]
@@ -807,6 +845,8 @@ const ChartManager = {
             return;
         }
         
+        this.destroyExistingChart('scenariosChart');
+        
         const t = translations[currentLanguage];
         const ctx = document.getElementById('scenariosChart').getContext('2d');
         
@@ -826,8 +866,8 @@ const ChartManager = {
                         100 / (expectedMetrics.paybackPeriod || 1),
                         expectedMetrics.irr
                     ],
-                    borderColor: '#00d9ff',
-                    backgroundColor: 'rgba(0, 217, 255, 0.3)',
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.3)',
                     borderWidth: 2
                 }, {
                     label: t['scenario-best'],
@@ -837,8 +877,8 @@ const ChartManager = {
                         100 / (bestMetrics.paybackPeriod || 1),
                         bestMetrics.irr
                     ],
-                    borderColor: '#39ff14',
-                    backgroundColor: 'rgba(57, 255, 20, 0.3)',
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.3)',
                     borderWidth: 2
                 }, {
                     label: t['scenario-worst'],
@@ -848,8 +888,8 @@ const ChartManager = {
                         100 / (worstMetrics.paybackPeriod || 1),
                         worstMetrics.irr
                     ],
-                    borderColor: '#ff6b35',
-                    backgroundColor: 'rgba(255, 107, 53, 0.3)',
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.3)',
                     borderWidth: 2
                 }]
             },
@@ -1035,13 +1075,13 @@ document.getElementById('projectForm').addEventListener('submit', function(e) {
             return;
         }
 
-        const expectedMetrics = FinancialCalculator.calculateMetrics(projectData);
+        const expectedMetrics = FinanceEngine.calculateMetrics(projectData);
         
         const bestCaseData = { ...projectData, yearlyRevenue: projectData.yearlyRevenue * projectData.bestCaseMultiplier };
-        const bestMetrics = FinancialCalculator.calculateMetrics(bestCaseData);
+        const bestMetrics = FinanceEngine.calculateMetrics(bestCaseData);
         
         const worstCaseData = { ...projectData, yearlyRevenue: projectData.yearlyRevenue * projectData.worstCaseMultiplier };
-        const worstMetrics = FinancialCalculator.calculateMetrics(worstCaseData);
+        const worstMetrics = FinanceEngine.calculateMetrics(worstCaseData);
 
         UIUpdater.updateDashboard(expectedMetrics);
         UIUpdater.updateScenarioCards(expectedMetrics, bestMetrics, worstMetrics);
@@ -1272,6 +1312,159 @@ document.getElementById('strategicForm').addEventListener('submit', function(e) 
     handleStrategicSubmit();
 });
 
+const StrategicScorer = {
+    scoreByLength(text, minLength, maxLength) {
+        const length = text.trim().length;
+        if (length === 0) return 0;
+        if (length >= maxLength) return 100;
+        if (length < minLength) return Math.round((length / minLength) * 50);
+        return Math.round(50 + ((length - minLength) / (maxLength - minLength)) * 50);
+    },
+
+    detectBusinessKeywords(text) {
+        const keywords = {
+            en: ['revenue', 'profit', 'growth', 'efficiency', 'roi', 'cost reduction', 'savings', 
+                 'productivity', 'market', 'customer', 'optimization', 'competitive advantage'],
+            es: ['ingresos', 'ganancia', 'crecimiento', 'eficiencia', 'roi', 'reducción de costos', 
+                 'ahorro', 'productividad', 'mercado', 'cliente', 'optimización', 'ventaja competitiva'],
+            all: ['revenue', 'profit', 'growth', 'efficiency', 'roi', 'cost reduction', 'savings', 
+                  'productivity', 'ingresos', 'ganancia', 'crecimiento', 'eficiencia', 
+                  'ahorro', 'productividad', 'mercado', 'market', 'customer', 'cliente']
+        };
+        
+        const lowerText = text.toLowerCase();
+        let count = 0;
+        keywords.all.forEach(keyword => {
+            if (lowerText.includes(keyword)) count++;
+        });
+        return Math.min(count * 10, 40);
+    },
+
+    detectQuantifiableMetrics(text) {
+        // Detect numbers, percentages, currency symbols
+        const hasNumbers = /\d+/.test(text);
+        const hasPercentages = /%/.test(text);
+        const hasCurrency = /\$|€|£|USD|EUR/.test(text);
+        
+        let score = 0;
+        if (hasNumbers) score += 20;
+        if (hasPercentages) score += 15;
+        if (hasCurrency) score += 15;
+        return score;
+    },
+
+    analyzeStrategicData(data) {
+        // Score each field
+        const problemScore = this.scoreByLength(data.problem, 100, 300) * 0.3 +
+                            this.detectBusinessKeywords(data.problem) * 0.3 +
+                            this.detectQuantifiableMetrics(data.problem) * 0.4;
+
+        const solutionScore = this.scoreByLength(data.solution, 100, 300) * 0.4 +
+                             this.detectBusinessKeywords(data.solution) * 0.6;
+
+        const metricsScore = this.scoreByLength(data.metrics, 80, 250) * 0.3 +
+                            this.detectQuantifiableMetrics(data.metrics) * 0.7;
+
+        const projectNameScore = data.projectName.trim().length >= 10 ? 80 : 50;
+
+        // Overall viability score
+        const viabilityScore = Math.round(
+            problemScore * 0.35 +
+            solutionScore * 0.30 +
+            metricsScore * 0.30 +
+            projectNameScore * 0.05
+        );
+
+        // Generate deterministic strengths, weaknesses, and risks
+        const strengths = [];
+        const weaknesses = [];
+        const risks = [];
+
+        // Strengths based on scores
+        if (problemScore >= 70) {
+            strengths.push(currentLanguage === 'en' ? 
+                'Clear problem definition with quantifiable impact' : 
+                'Definición clara del problema con impacto cuantificable');
+        } else {
+            weaknesses.push(currentLanguage === 'en' ? 
+                'Problem definition could benefit from more quantifiable metrics' : 
+                'La definición del problema podría beneficiarse de métricas más cuantificables');
+        }
+
+        if (solutionScore >= 70) {
+            strengths.push(currentLanguage === 'en' ? 
+                'Well-structured solution approach with clear business value' : 
+                'Enfoque de solución bien estructurado con valor de negocio claro');
+        } else {
+            weaknesses.push(currentLanguage === 'en' ? 
+                'Solution approach should detail more business benefits' : 
+                'El enfoque de solución debería detallar más beneficios de negocio');
+        }
+
+        if (metricsScore >= 70) {
+            strengths.push(currentLanguage === 'en' ? 
+                'Comprehensive success metrics with measurable targets' : 
+                'Métricas de éxito completas con objetivos medibles');
+        } else {
+            weaknesses.push(currentLanguage === 'en' ? 
+                'Success metrics need more specific numerical targets' : 
+                'Las métricas de éxito necesitan objetivos numéricos más específicos');
+        }
+
+        // Always add a generic strength if we have at least 2
+        if (strengths.length >= 2) {
+            strengths.push(currentLanguage === 'en' ? 
+                'Strategic alignment with business objectives demonstrated' : 
+                'Alineación estratégica con objetivos de negocio demostrada');
+        }
+
+        // Add risks based on overall score
+        if (viabilityScore < 60) {
+            risks.push(currentLanguage === 'en' ? 
+                'Implementation complexity may pose execution challenges' : 
+                'La complejidad de implementación puede presentar desafíos de ejecución');
+        }
+        
+        risks.push(currentLanguage === 'en' ? 
+            'Stakeholder buy-in is critical for success' : 
+            'La aceptación de los interesados es crítica para el éxito');
+
+        if (this.detectQuantifiableMetrics(data.problem) < 20) {
+            risks.push(currentLanguage === 'en' ? 
+                'Limited quantification may affect ROI validation' : 
+                'La cuantificación limitada puede afectar la validación del ROI');
+        }
+
+        const recommendation = viabilityScore >= 75 ? 
+            (currentLanguage === 'en' ? 
+                'Highly recommended to proceed with detailed financial analysis. Strong strategic foundation.' : 
+                'Altamente recomendado proceder con análisis financiero detallado. Fundamento estratégico sólido.') :
+            viabilityScore >= 60 ?
+            (currentLanguage === 'en' ? 
+                'Recommended to proceed with financial analysis. Consider strengthening key metrics.' : 
+                'Recomendado proceder con análisis financiero. Considere fortalecer las métricas clave.') :
+            (currentLanguage === 'en' ? 
+                'Proceed with caution. Strengthen problem quantification and success metrics before detailed planning.' : 
+                'Proceder con precaución. Fortalecer la cuantificación del problema y las métricas de éxito antes de la planificación detallada.');
+
+        return {
+            viability: Math.min(95, Math.max(60, viabilityScore)),
+            strengths: strengths.length > 0 ? strengths : [
+                currentLanguage === 'en' ? 
+                    'Project demonstrates basic strategic thinking' : 
+                    'El proyecto demuestra pensamiento estratégico básico'
+            ],
+            weaknesses: weaknesses.length > 0 ? weaknesses : [
+                currentLanguage === 'en' ? 
+                    'Consider adding more detail to all sections' : 
+                    'Considere agregar más detalle a todas las secciones'
+            ],
+            risks: risks,
+            recommendation: recommendation
+        };
+    }
+};
+
 function handleStrategicSubmit() {
     strategicData = {
         projectName: document.getElementById('stratProjectName').value,
@@ -1283,36 +1476,10 @@ function handleStrategicSubmit() {
     UIUpdater.showLoading();
     
     setTimeout(() => {
-        const analysis = generateMockLLMAnalysis(strategicData);
+        const analysis = StrategicScorer.analyzeStrategicData(strategicData);
         displayStrategicAnalysis(analysis);
         UIUpdater.hideLoading();
     }, 1500);
-}
-
-function generateMockLLMAnalysis(data) {
-    const viabilityScore = Math.floor(Math.random() * 20) + 75;
-    
-    const analysis = {
-        viability: viabilityScore,
-        strengths: [
-            currentLanguage === 'en' ? 'Clear problem definition and market need' : 'Definición clara del problema y necesidad del mercado',
-            currentLanguage === 'en' ? 'Well-structured solution approach' : 'Enfoque de solución bien estructurado',
-            currentLanguage === 'en' ? 'Measurable success metrics defined' : 'Métricas de éxito medibles definidas'
-        ],
-        weaknesses: [
-            currentLanguage === 'en' ? 'Market competition analysis needed' : 'Se necesita análisis de competencia del mercado',
-            currentLanguage === 'en' ? 'Resource requirements should be detailed further' : 'Los requisitos de recursos deben detallarse más'
-        ],
-        risks: [
-            currentLanguage === 'en' ? 'Implementation timeline may be challenging' : 'El cronograma de implementación puede ser desafiante',
-            currentLanguage === 'en' ? 'Stakeholder buy-in is critical for success' : 'La aceptación de los interesados es crítica para el éxito'
-        ],
-        recommendation: viabilityScore >= 80 
-            ? (currentLanguage === 'en' ? 'Highly recommended to proceed with detailed financial analysis' : 'Altamente recomendado proceder con análisis financiero detallado')
-            : (currentLanguage === 'en' ? 'Recommended to proceed with caution and detailed planning' : 'Recomendado proceder con precaución y planificación detallada')
-    };
-    
-    return analysis;
 }
 
 function displayStrategicAnalysis(analysis) {
